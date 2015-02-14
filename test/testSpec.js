@@ -149,6 +149,35 @@ describe('Find ids and classes on html', function () {
 
 });
 
+describe('Manage tolkens', function () {
+
+  it('get letter from number', function () {
+    var BASE = 26;
+    expect(N.toRadix(0, BASE)).to.be.equal('a');
+    expect(N.toRadix(25, BASE)).to.be.equal('z');
+    expect(N.toRadix(26, BASE)).to.be.equal('ba');
+    expect(N.toRadix(27, BASE)).to.be.equal('bb');
+    expect(N.toRadix((26*2), BASE)).to.be.equal('ca');
+    expect(N.toRadix((26*10), BASE)).to.be.equal('ka');
+    expect(N.toRadix((26*26), BASE)).to.be.equal('baa');
+  });
+
+  it('addTolken', function () {
+    var tolkensMap = [];
+    var expectedArrayA = [
+      { name: 'hidden', type: 'class', tolken: 'a' },
+    ];
+    var expectedArrayB = [
+      { name: 'hidden', type: 'class', tolken: 'a' },
+      { name: 'col-xs-12', type: 'class', tolken: 'b' },
+    ];
+
+    expect(N.addTolken('hidden', 'class', tolkensMap)).to.be.deep.equal(expectedArrayA);
+    expect(N.addTolken('col-xs-12', 'class', tolkensMap)).to.be.deep.equal(expectedArrayB);
+  });
+
+});
+
 
 describe('Get Version', function () {
   it('should get version', function () {
@@ -165,15 +194,16 @@ describe('Get Version', function () {
 1. Prepara lista de tokens
 
 Procura html
-2. Procura por atributos class
-3. Procura por atributos id
-4. Procura por atributos ng-class
+2. Procura por atributos class √
+3. Procura por atributos id √
+4. Procura por atributos ng-class √
 
 Procura por tokens javacript
 5. Procura por getElementById
 6. Procura por getElementsByClassName
 7. Procura por documentSelector
 8. Procura por element.className (add remove toggle contain)
+8. Procura por element.setAttribute (getAttribute)
 
 Procura por tokens jquery
 8. Procura por $().addClass
@@ -193,3 +223,5 @@ Procura por tokens jquery
 
 
 */
+
+

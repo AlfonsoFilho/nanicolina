@@ -111,6 +111,24 @@ describe('Find ids and classes on html', function () {
 
   });
 
+  it('should refactor html with tolkens', function () {
+    var tolkensMap = [
+      { name: '.content', type: 'class', tolken: 'a' },
+      { name: '.container', type: 'class', tolken: 'b' },
+      { name: '.hidden', type: 'class', tolken: 'c' },
+      { name: '.is-home', type: 'class', tolken: 'd' },
+      { name: '.row', type: 'class', tolken: 'e' },
+      { name: '.col-xs-12', type: 'class', tolken: 'f' },
+      { name: '.col-sm-8', type: 'class', tolken: 'g' },
+      { name: '.col-lg-4', type: 'class', tolken: 'h' },
+      { name: '.title', type: 'class', tolken: 'i' },
+      { name: '.link', type: 'class', tolken: 'j' },
+      { name: '.open', type: 'class', tolken: 'k' },
+      { name: '.visible-xs', type: 'class', tolken: 'l' },
+    ];
+    expect(N.getRefactoredHTML(srcHTML, tolkensMap)).to.be.equal(expectedHTML);
+  });
+
 });
 
 describe('Find ids and classes on css', function () {

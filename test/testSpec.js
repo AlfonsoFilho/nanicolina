@@ -1,61 +1,27 @@
 var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
+var fs = require('fs');
+var path = require('path');
 var Nanicolina = require("../lib/Nanicolina.js");
+
+var rootPath = process.cwd();
+var fixturesPath = path.join(rootPath, 'test', 'fixtures');
+var expectedPath = path.join(rootPath, 'test', 'expected');
 
 var N = new Nanicolina();
 
-var html, js, css;
+var srcHTML, srcJS, srcCSS, expectedHTML, expectedCSS;
 
 
 beforeEach(function (done) {
-  html = [
-    '<html>',
-      '<head>',
-        '<title>Teste</title>',
-      '</head>',
-      '<body>',
-        '<div id="main" CLASS="content container" role="document" data-ng-class="{\'hidden\': isHidden(), \'is-home\': isHome()}">',
-          '<div class="row">',
-            '<div class="col-xs-12 col-sm-8 col-lg-4">',
-              '<h1 class="title visible-xs">Title</h1>',
-              '<a id="close" href="http://www.google.com" class="link js-link" ng-class="{\'open\': isOpen()}">Close</a>',
-            '</div>',
-          '</div>',
-        '</div>',
-      '</body>',
-    '</html>'
-  ].join('');
 
-  css = [
-    'body {',
-      'margin: 0;',
-      'padding: 0;',
-    '}',
-    '#main {',
-      'margin: 0;',
-      'padding: 0;',
-    '}',
-    '#main.content {',
-      'margin: 0;',
-      'padding: 0;',
-    '}',
-    '#main.content container {',
-      'margin: 0;',
-      'padding: 0;',
-    '}',
-    'div[role=\'document\'] {',
-      'margin: 0;',
-      'padding: 0;',
-    '}',
-    'col-xs-12,',
-    'col-sm-8,',
-    'col-lg-4 {',
-      'float: left;',
-    '}'
-
-  ].join('');
+  srcHTML = fs.readFileSync(path.join(fixturesPath, 'test.html'), {encoding: 'utf8'});
+  srcCSS = fs.readFileSync(path.join(fixturesPath, 'test.css'), {encoding: 'utf8'});
+  expectedHTML = fs.readFileSync(path.join(expectedPath, 'test.html'), {encoding: 'utf8'});
+  expectedCSS = fs.readFileSync(path.join(expectedPath, 'test.css'), {encoding: 'utf8'});
   done();
+
 });
 
 
@@ -63,6 +29,8 @@ describe('Find ids and classes on html', function () {
 
   it('should list all tags attributes', function () {
     var attributes = [
+      'lang="en"',
+      'charset="utf-8"',
       'id="main"',
       'class="content container"',
       'role="document"',
@@ -76,11 +44,11 @@ describe('Find ids and classes on html', function () {
       'ng-class="{\'open\': isopen()}"',
     ];
 
-    expect(N.getAttributesFromHTML(html)).to.deep.equal(attributes);
+    expect(N.getAttributesFromHTML(srcHTML)).to.deep.equal(attributes);
   });
 
   it('should list all class attributes', function () {
-    var attrList = N.getAttributesFromHTML(html);
+    var attrList = N.getAttributesFromHTML(srcHTML);
     var expectedArray = [
       'class="content container"',
       'class="row"',
@@ -95,7 +63,7 @@ describe('Find ids and classes on html', function () {
 
   it('should list all id attributes', function () {
 
-    var attrList = N.getAttributesFromHTML(html);
+    var attrList = N.getAttributesFromHTML(srcHTML);
     var expectedArray = [
       'id="main"',
       'id="close"'
@@ -106,7 +74,7 @@ describe('Find ids and classes on html', function () {
   });
 
   it('should list all ng-class attributes', function () {
-    var attrList = N.getAttributesFromHTML(html);
+    var attrList = N.getAttributesFromHTML(srcHTML);
     var expectedArray = [
       'data-ng-class="{\'hidden\': ishidden(), \'is-home\': ishome()}"',
       'ng-class="{\'open\': isopen()}"'
@@ -117,34 +85,60 @@ describe('Find ids and classes on html', function () {
   });
 
   it('should get attribute value', function () {
-    var attrList = N.getAttributesFromHTML(html);
+    var attrList = N.getAttributesFromHTML(srcHTML);
 
-    expect(attrList[0]).to.be.equal('id="main"');
-    expect(N.getAttrValue(attrList[0])).to.be.equal('main');
-    expect(attrList[3]).to.be.equal('data-ng-class="{\'hidden\': ishidden(), \'is-home\': ishome()}"');
-    expect(N.getAttrValue(attrList[3])).to.be.equal('{\'hidden\': ishidden(), \'is-home\': ishome()}');
-    expect(attrList[5]).to.be.equal('class="col-xs-12 col-sm-8 col-lg-4"');
-    expect(N.getAttrValue(attrList[5])).to.be.equal('col-xs-12 col-sm-8 col-lg-4');
+    expect(attrList[2]).to.be.equal('id="main"');
+    expect(N.getAttrValue(attrList[2])).to.be.equal('main');
+    expect(attrList[5]).to.be.equal('data-ng-class="{\'hidden\': ishidden(), \'is-home\': ishome()}"');
+    expect(N.getAttrValue(attrList[5])).to.be.equal('{\'hidden\': ishidden(), \'is-home\': ishome()}');
+    expect(attrList[7]).to.be.equal('class="col-xs-12 col-sm-8 col-lg-4"');
+    expect(N.getAttrValue(attrList[7])).to.be.equal('col-xs-12 col-sm-8 col-lg-4');
   });
 
   it('should get list/array from attribute value', function () {
-    var attrList = N.getAttributesFromHTML(html);
+    var attrList = N.getAttributesFromHTML(srcHTML);
 
-    expect(N.getAttrValueList(N.getAttrValue(attrList[0]))).to.be.deep.equal(['main']);
-    expect(N.getAttrValueList(N.getAttrValue(attrList[5]))).to.be.deep.equal(['col-xs-12', 'col-sm-8', 'col-lg-4']);
+    expect(N.getAttrValueList(N.getAttrValue(attrList[2]))).to.be.deep.equal(['main']);
+    expect(N.getAttrValueList(N.getAttrValue(attrList[3]))).to.be.deep.equal(['content', 'container']);
+    expect(N.getAttrValueList(N.getAttrValue(attrList[7]))).to.be.deep.equal(['col-xs-12', 'col-sm-8', 'col-lg-4']);
   });
 
   it('should get list/array from attribute value from ng-class', function () {
-    var attrList = N.getAttributesFromHTML(html);
+    var attrList = N.getAttributesFromHTML(srcHTML);
 
-    expect(N.getNgClassValueList(N.getAttrValue(attrList[3]))).to.be.deep.equal(['hidden', 'is-home']);
-    expect(N.getNgClassValueList(N.getAttrValue(attrList[10]))).to.be.deep.equal(['open']);
+    expect(N.getNgClassValueList(N.getAttrValue(attrList[5]))).to.be.deep.equal(['hidden', 'is-home']);
+    expect(N.getNgClassValueList(N.getAttrValue(attrList[12]))).to.be.deep.equal(['open']);
 
   });
 
+});
+
+describe('Find ids and classes on css', function () {
+
+  it('should get all css classes, not duplicated', function () {
+
+    var expectArray = [
+      '.content',
+      '.container',
+      '.hidden',
+      '.is-home',
+      '.row',
+      '.col-xs-12',
+      '.col-sm-8',
+      '.col-lg-4',
+      '.title',
+      '.link',
+      '.open',
+      '.visible-xs',
+    ];
+
+    expect(N.getClassesFromCSS(srcCSS)).to.be.deep.equal(expectArray);
 
 
-  it.skip('should be an example', function () {
+  });
+
+  it('should refactor css with tolkens', function () {
+    expect(N.getRefactoredCSS(srcCSS)).to.be.equal(expectedCSS);
   });
 
 });
@@ -173,10 +167,31 @@ describe('Manage tolkens', function () {
     ];
 
     expect(N.addTolken('hidden', 'class', tolkensMap)).to.be.deep.equal(expectedArrayA);
+    expect(N.addTolken('hidden', 'class', tolkensMap)).to.be.deep.equal(expectedArrayA);
     expect(N.addTolken('col-xs-12', 'class', tolkensMap)).to.be.deep.equal(expectedArrayB);
   });
 
+  it('get tolkens map', function () {
+    var expectedArray = [
+      { name: '.content', type: 'class', tolken: 'a' },
+      { name: '.container', type: 'class', tolken: 'b' },
+      { name: '.hidden', type: 'class', tolken: 'c' },
+      { name: '.is-home', type: 'class', tolken: 'd' },
+      { name: '.row', type: 'class', tolken: 'e' },
+      { name: '.col-xs-12', type: 'class', tolken: 'f' },
+      { name: '.col-sm-8', type: 'class', tolken: 'g' },
+      { name: '.col-lg-4', type: 'class', tolken: 'h' },
+      { name: '.title', type: 'class', tolken: 'i' },
+      { name: '.link', type: 'class', tolken: 'j' },
+      { name: '.open', type: 'class', tolken: 'k' },
+      { name: '.visible-xs', type: 'class', tolken: 'l' },
+    ];
+
+    expect(N.getTolkensMap(srcCSS)).to.be.deep.equal(expectedArray);
+  });
+
 });
+
 
 
 describe('Get Version', function () {

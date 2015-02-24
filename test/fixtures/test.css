@@ -1,0 +1,51 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+#main {
+  margin: 0;
+  padding: 0;
+}
+#main.content {
+  margin: 0;
+  padding: 0;
+}
+#main.content .container {
+  margin: 0;
+  padding: 0;
+}
+.hidden {
+  display: none;
+}
+.is-home {
+  margin: 0;
+}
+div[role='document'] {
+  margin: 0;
+  padding: 0;
+}
+.row {
+  clear: both;
+}
+.col-xs-12,
+.col-sm-8,
+.col-lg-4 {
+  float: left;
+}
+.title {
+  font-size: 2em;
+}
+.link {
+  text-decoration: underline;
+}
+.open {
+  min-height: 300px;
+}
+@media all and (max-width: 300px){
+  .visible-xs {
+    display: block;
+  }
+  .open {
+    min-height: 200px;
+  }
+}

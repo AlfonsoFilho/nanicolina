@@ -71,7 +71,7 @@ module.exports = function(grunt) {
           'test/**/*.js',
           'lib/**/*.js'
         ],
-        tasks: ['jshint', 'test']
+        tasks: ['mochaTest']
       }
     }
 

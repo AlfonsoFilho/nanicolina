@@ -20,6 +20,9 @@ body {
 .is-home {
   margin: 0;
 }
+.is-home > .row {
+  margin: 0;
+}
 div[role='document'] {
   margin: 0;
   padding: 0;
@@ -40,10 +43,12 @@ div[role='document'] {
 }
 .open {
   min-height: 300px;
+  visibility: hidden;
 }
 @media all and (max-width: 300px){
   .visible-xs {
     display: block;
+    visibility: visible;
   }
   .open {
     min-height: 200px;

@@ -1,0 +1,68 @@
+.a {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.b {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.c,
+.d,
+.e,
+.f,
+.g,
+.h,
+.i,
+.j,
+.k,
+.l,
+.m,
+.n,
+.o,
+.p,
+.q,
+.r,
+.s,
+.t,
+.u,
+.v,
+.w,
+.x,
+.y,
+.z,
+.ba,
+.bb,
+.bc,
+.bd,
+.be,
+.bf,
+.bg,
+.bh,
+.bi,
+.bj,
+.bk,
+.bl,
+.bm,
+.bn,
+.bo,
+.bp,
+.bq,
+.br,
+.bs,
+.bt,
+.bu,
+.bv,
+.bw,
+.bx {
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+@media all and (max-width: 300px){
+  .b {
+    margin-right: 0;
+  }
+}

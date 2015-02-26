@@ -20,6 +20,12 @@ beforeEach(function (done) {
   srcCSS = fs.readFileSync(path.join(fixturesPath, 'test.css'), {encoding: 'utf8'});
   expectedHTML = fs.readFileSync(path.join(expectedPath, 'test.html'), {encoding: 'utf8'});
   expectedCSS = fs.readFileSync(path.join(expectedPath, 'test.css'), {encoding: 'utf8'});
+
+  srcCssA = fs.readFileSync(path.join(fixturesPath, 'a.css'), {encoding: 'utf8'});
+  srcCssB = fs.readFileSync(path.join(fixturesPath, 'b.css'), {encoding: 'utf8'});
+  expectedCssA = fs.readFileSync(path.join(expectedPath, 'a.css'), {encoding: 'utf8'});
+  expectedCssB = fs.readFileSync(path.join(expectedPath, 'b.css'), {encoding: 'utf8'});
+
   done();
 
 });
@@ -156,7 +162,8 @@ describe('Find ids and classes on css', function () {
   });
 
   it('should refactor css with tolkens', function () {
-    expect(N.getRefactoredCSS(srcCSS)).to.be.equal(expectedCSS);
+    var tolkensMap = [];
+    expect(N.getRefactoredCSS(tolkensMap, srcCSS)).to.be.equal(expectedCSS);
   });
 
 });
@@ -169,6 +176,8 @@ describe('Manage tolkens', function () {
     expect(N.toRadix(25, BASE)).to.be.equal('z');
     expect(N.toRadix(26, BASE)).to.be.equal('ba');
     expect(N.toRadix(27, BASE)).to.be.equal('bb');
+    expect(N.toRadix(37, BASE)).to.be.equal('bl');
+    expect(N.toRadix(38, BASE)).to.be.equal('bm');
     expect(N.toRadix((26*2), BASE)).to.be.equal('ca');
     expect(N.toRadix((26*10), BASE)).to.be.equal('ka');
     expect(N.toRadix((26*26), BASE)).to.be.equal('baa');
@@ -190,6 +199,7 @@ describe('Manage tolkens', function () {
   });
 
   it('get tolkens map', function () {
+    var tolkensMap = [];
     var expectedArray = [
       { name: '.content', type: 'class', tolken: 'a' },
       { name: '.container', type: 'class', tolken: 'b' },
@@ -205,9 +215,25 @@ describe('Manage tolkens', function () {
       { name: '.visible-xs', type: 'class', tolken: 'l' },
     ];
 
-    expect(N.getTolkensMap(srcCSS)).to.be.deep.equal(expectedArray);
+    expect(N.getTolkensMap(tolkensMap, srcCSS)).to.be.deep.equal(expectedArray);
   });
 
+});
+
+describe('Main functions', function () {
+  it('should glue everything', function () {
+
+    var expectedObject = { css: [expectedCssA, expectedCssB] };
+
+    var result = N.rename({
+      css: [srcCssA, srcCssB]
+    });
+
+    // expect(result).to.be.deep.equal(expectedObject);
+    expect(result.css[0]).to.be.deep.equal(expectedObject.css[0]);
+    expect(result.css[1]).to.be.deep.equal(expectedObject.css[1]);
+
+  })
 });
 
 

@@ -37,7 +37,8 @@
     "grunt-mocha-test": "^0.12.7",
     "chai": "^2.0.0",
     "css": "^2.2.0",
-    "cheerio": "^0.18.0"
+    "cheerio": "^0.18.0",
+    "maxmin": "^1.0.1"
   },
   "peerDependencies": {
     "grunt": "~0.4.5"

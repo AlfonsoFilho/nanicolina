@@ -26,6 +26,13 @@ beforeEach(function (done) {
   expectedCssA = fs.readFileSync(path.join(expectedPath, 'a.css'), {encoding: 'utf8'});
   expectedCssB = fs.readFileSync(path.join(expectedPath, 'b.css'), {encoding: 'utf8'});
 
+  srcHtmlA = fs.readFileSync(path.join(fixturesPath, 'a.html'), {encoding: 'utf8'});
+  srcHtmlB = fs.readFileSync(path.join(fixturesPath, 'b.html'), {encoding: 'utf8'});
+  srcHtmlC = fs.readFileSync(path.join(fixturesPath, 'c.html'), {encoding: 'utf8'});
+  expectedHtmlA = fs.readFileSync(path.join(expectedPath, 'a.html'), {encoding: 'utf8'});
+  expectedHtmlB = fs.readFileSync(path.join(expectedPath, 'b.html'), {encoding: 'utf8'});
+  expectedHtmlC = fs.readFileSync(path.join(expectedPath, 'c.html'), {encoding: 'utf8'});
+
   done();
 
 });
@@ -132,7 +139,7 @@ describe('Find ids and classes on html', function () {
       { name: '.open', type: 'class', tolken: 'k' },
       { name: '.visible-xs', type: 'class', tolken: 'l' },
     ];
-    expect(N.getRefactoredHTML(srcHTML, tolkensMap)).to.be.equal(expectedHTML);
+    expect(N.getRefactoredHTML(tolkensMap, srcHTML)).to.be.equal(expectedHTML);
   });
 
 });
@@ -223,15 +230,19 @@ describe('Manage tolkens', function () {
 describe('Main functions', function () {
   it('should glue everything', function () {
 
-    var expectedObject = { css: [expectedCssA, expectedCssB] };
+    var expectedObject = {
+      css: [expectedCssA, expectedCssB],
+      html: [expectedHtmlA, expectedHtmlB, expectedHtmlC]
+    };
 
     var result = N.rename({
-      css: [srcCssA, srcCssB]
+      css: [srcCssA, srcCssB],
+      html: [srcHtmlA, srcHtmlB, srcHtmlC]
     });
 
-    // expect(result).to.be.deep.equal(expectedObject);
-    expect(result.css[0]).to.be.deep.equal(expectedObject.css[0]);
-    expect(result.css[1]).to.be.deep.equal(expectedObject.css[1]);
+    expect(result).to.be.deep.equal(expectedObject);
+    // expect(result.css[0]).to.be.deep.equal(expectedObject.css[0]);
+    // expect(result.css[1]).to.be.deep.equal(expectedObject.css[1]);
 
   })
 });

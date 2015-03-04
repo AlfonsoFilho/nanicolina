@@ -125,20 +125,21 @@ describe('Find ids and classes on html', function () {
   });
 
   it('should refactor html with tolkens', function () {
-    var tolkensMap = [
-      { name: '.content', type: 'class', tolken: 'a' },
-      { name: '.container', type: 'class', tolken: 'b' },
-      { name: '.hidden', type: 'class', tolken: 'c' },
-      { name: '.is-home', type: 'class', tolken: 'd' },
-      { name: '.row', type: 'class', tolken: 'e' },
-      { name: '.col-xs-12', type: 'class', tolken: 'f' },
-      { name: '.col-sm-8', type: 'class', tolken: 'g' },
-      { name: '.col-lg-4', type: 'class', tolken: 'h' },
-      { name: '.title', type: 'class', tolken: 'i' },
-      { name: '.link', type: 'class', tolken: 'j' },
-      { name: '.open', type: 'class', tolken: 'k' },
-      { name: '.visible-xs', type: 'class', tolken: 'l' },
-    ];
+    var tolkensMap = {
+      '.content': 'a',
+      '.container': 'b',
+      '.hidden': 'c',
+      '.is-home': 'd',
+      '.row': 'e',
+      '.col-xs-12': 'f',
+      '.col-sm-8': 'g',
+      '.col-lg-4': 'h',
+      '.title': 'i',
+      '.link': 'j',
+      '.open': 'k',
+      '.visible-xs': 'l',
+    };
+
     expect(N.getRefactoredHTML(tolkensMap, srcHTML)).to.be.equal(expectedHTML);
   });
 
@@ -149,18 +150,18 @@ describe('Find ids and classes on css', function () {
   it('should get all css classes, not duplicated', function () {
 
     var expectArray = [
-      '.content',
-      '.container',
-      '.hidden',
-      '.is-home',
-      '.row',
-      '.col-xs-12',
-      '.col-sm-8',
-      '.col-lg-4',
-      '.title',
-      '.link',
-      '.open',
-      '.visible-xs',
+      'content',
+      'container',
+      'hidden',
+      'is-home',
+      'row',
+      'col-xs-12',
+      'col-sm-8',
+      'col-lg-4',
+      'title',
+      'link',
+      'open',
+      'visible-xs',
     ];
 
     expect(N.getClassesFromCSS(srcCSS)).to.be.deep.equal(expectArray);
@@ -169,7 +170,8 @@ describe('Find ids and classes on css', function () {
   });
 
   it('should refactor css with tolkens', function () {
-    var tolkensMap = [];
+    var tolkensMap = {};
+    tolkensMap = N.getTolkensMap(tolkensMap, srcCSS);
     expect(N.getRefactoredCSS(tolkensMap, srcCSS)).to.be.equal(expectedCSS);
   });
 
@@ -191,44 +193,51 @@ describe('Manage tolkens', function () {
   });
 
   it('addTolken', function () {
-    var tolkensMap = [];
-    var expectedArrayA = [
-      { name: 'hidden', type: 'class', tolken: 'a' },
-    ];
-    var expectedArrayB = [
-      { name: 'hidden', type: 'class', tolken: 'a' },
-      { name: 'col-xs-12', type: 'class', tolken: 'b' },
-    ];
 
-    expect(N.addTolken('hidden', 'class', tolkensMap)).to.be.deep.equal(expectedArrayA);
-    expect(N.addTolken('hidden', 'class', tolkensMap)).to.be.deep.equal(expectedArrayA);
-    expect(N.addTolken('col-xs-12', 'class', tolkensMap)).to.be.deep.equal(expectedArrayB);
+    var expectedObjectA = {
+      '.hidden': 'a',
+    };
+    var expectedObjectB = {
+      '.hidden': 'a',
+      '.col-xs-12': 'b'
+    };
+
+    var tolkensMapStep1 = {};
+    var tolkensMapStep2 = N.addTolken('hidden', 'class', tolkensMapStep1);;
+    var tolkensMapStep3 = N.addTolken('hidden', 'class', tolkensMapStep2);;
+
+
+    expect(N.addTolken('hidden', 'class', tolkensMapStep1)).to.be.deep.equal(expectedObjectA);
+    expect(N.addTolken('hidden', 'class', tolkensMapStep2)).to.be.deep.equal(expectedObjectA);
+    expect(N.addTolken('col-xs-12', 'class', tolkensMapStep3)).to.be.deep.equal(expectedObjectB);
   });
 
   it('get tolkens map', function () {
-    var tolkensMap = [];
-    var expectedArray = [
-      { name: '.content', type: 'class', tolken: 'a' },
-      { name: '.container', type: 'class', tolken: 'b' },
-      { name: '.hidden', type: 'class', tolken: 'c' },
-      { name: '.is-home', type: 'class', tolken: 'd' },
-      { name: '.row', type: 'class', tolken: 'e' },
-      { name: '.col-xs-12', type: 'class', tolken: 'f' },
-      { name: '.col-sm-8', type: 'class', tolken: 'g' },
-      { name: '.col-lg-4', type: 'class', tolken: 'h' },
-      { name: '.title', type: 'class', tolken: 'i' },
-      { name: '.link', type: 'class', tolken: 'j' },
-      { name: '.open', type: 'class', tolken: 'k' },
-      { name: '.visible-xs', type: 'class', tolken: 'l' },
-    ];
 
-    expect(N.getTolkensMap(tolkensMap, srcCSS)).to.be.deep.equal(expectedArray);
+    var expectedObject = {
+      '.content': 'a',
+      '.container': 'b',
+      '.hidden': 'c',
+      '.is-home': 'd',
+      '.row': 'e',
+      '.col-xs-12': 'f',
+      '.col-sm-8': 'g',
+      '.col-lg-4': 'h',
+      '.title': 'i',
+      '.link': 'j',
+      '.open': 'k',
+      '.visible-xs': 'l'
+    };
+
+    var tolkensMap = {};
+
+    expect(N.getTolkensMap(tolkensMap, srcCSS)).to.be.deep.equal(expectedObject);
   });
 
 });
 
 describe('Main functions', function () {
-  it('should glue everything', function () {
+  it('should rename classes', function () {
 
     var expectedObject = {
       css: [expectedCssA, expectedCssB],
@@ -241,9 +250,6 @@ describe('Main functions', function () {
     });
 
     expect(result).to.be.deep.equal(expectedObject);
-    // expect(result.css[0]).to.be.deep.equal(expectedObject.css[0]);
-    // expect(result.css[1]).to.be.deep.equal(expectedObject.css[1]);
-
   })
 });
 

@@ -33,6 +33,9 @@ beforeEach(function (done) {
   expectedHtmlB = fs.readFileSync(path.join(expectedPath, 'b.html'), {encoding: 'utf8'});
   expectedHtmlC = fs.readFileSync(path.join(expectedPath, 'c.html'), {encoding: 'utf8'});
 
+
+  srcTheme = fs.readFileSync(path.join(fixturesPath, 'theme.css'), {encoding: 'utf8'});
+
   done();
 
 });
@@ -180,16 +183,15 @@ describe('Find ids and classes on css', function () {
 describe('Manage tolkens', function () {
 
   it('get letter from number', function () {
-    var BASE = 26;
+    var BASE = 52;
     expect(N.toRadix(0, BASE)).to.be.equal('a');
     expect(N.toRadix(25, BASE)).to.be.equal('z');
-    expect(N.toRadix(26, BASE)).to.be.equal('ba');
-    expect(N.toRadix(27, BASE)).to.be.equal('bb');
-    expect(N.toRadix(37, BASE)).to.be.equal('bl');
-    expect(N.toRadix(38, BASE)).to.be.equal('bm');
-    expect(N.toRadix((26*2), BASE)).to.be.equal('ca');
-    expect(N.toRadix((26*10), BASE)).to.be.equal('ka');
-    expect(N.toRadix((26*26), BASE)).to.be.equal('baa');
+    expect(N.toRadix(26, BASE)).to.be.equal('A');
+    expect(N.toRadix(27, BASE)).to.be.equal('B');
+    expect(N.toRadix(52, BASE)).to.be.equal('ba');
+    expect(N.toRadix(53, BASE)).to.be.equal('bb');
+    expect(N.toRadix((52*10), BASE)).to.be.equal('ka');
+    expect(N.toRadix((52*52), BASE)).to.be.equal('baa');
   });
 
   it('addTolken', function () {
@@ -258,8 +260,22 @@ describe('Main functions', function () {
 describe('Get Version', function () {
   it('should get version', function () {
     expect(N.getVersion()).to.equal('0.0.0');
-  })
+  });
+
+  it.only('Teste Theme', function (done) {
+    var tolkensMap = {};
+    this.timeout(30000);
+    tolkensMap = N.getTolkensMap(tolkensMap, srcTheme);
+    fs.writeFile('tolkensMap.js', JSON.stringify(tolkensMap));
+    fs.writeFile('teste.css', N.getRefactoredCSS(tolkensMap, srcTheme), function () {
+      done();
+    });
+
+    // expect(N.getRefactoredCSS(tolkensMap, srcCSS)).to.be.equal(expectedCSS);
+  });
 });
+
+
 
 
 

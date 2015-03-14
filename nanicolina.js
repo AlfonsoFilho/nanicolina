@@ -1,3 +1,4 @@
+/* global */
 'use strict';
 
 module.exports = function () {
@@ -12,8 +13,8 @@ module.exports = function () {
   for(var fn in R){
     global[fn] = R[fn];
   }
+  var length = R.length; // Fix lint error
 
-  // var packageJson = require('../package.json');
 
   var ATTR = /(\S+)=["]?((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["]?/g;
   var CLASS_ATTR = /^class=/g;
@@ -26,9 +27,6 @@ module.exports = function () {
 
   var RADIX = 52;
 
-  var getVersion = function(){
-    return packageJson.version;
-  };
 
   var getAttributesFromHTML = compose(
     match(ATTR),
@@ -129,13 +127,13 @@ module.exports = function () {
 
   var getTolkensMap = function (tolkensMap, cssStr) {
     var classes = getClassesFromCSS(cssStr);
-    var tolkensMap = tolkensMap || {};
+    var _tolkensMap = _tolkensMap || {};
 
     forEach(function (item) {
-      tolkensMap = addTolken(item, 'class', tolkensMap)
+      _tolkensMap = addTolken(item, 'class', _tolkensMap);
     }, classes);
 
-    return tolkensMap;
+    return _tolkensMap;
   };
 
   var getRefactoredCSS = function(tolkensMap, cssStr){
@@ -212,12 +210,11 @@ module.exports = function () {
 
     return result;
 
-  }
+  };
 
 
 
   return {
-    getVersion: getVersion,
     getAttributesFromHTML: getAttributesFromHTML,
     getClassAttributes: getClassAttributes,
     getIdAttributes: getIdAttributes,

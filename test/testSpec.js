@@ -11,8 +11,20 @@ var expectedPath = path.join(rootPath, 'test', 'expected');
 
 var N = new Nanicolina();
 
-var srcHTML, srcJS, srcCSS, expectedHTML, expectedCSS;
-
+var srcHTML,
+    srcCSS,
+    expectedHTML,
+    expectedCSS,
+    srcCssA,
+    srcCssB,
+    expectedCssA,
+    expectedCssB,
+    srcHtmlA,
+    srcHtmlB,
+    srcHtmlC,
+    expectedHtmlA,
+    expectedHtmlB,
+    expectedHtmlC;
 
 beforeEach(function (done) {
 
@@ -32,9 +44,6 @@ beforeEach(function (done) {
   expectedHtmlA = fs.readFileSync(path.join(expectedPath, 'a.html'), {encoding: 'utf8'});
   expectedHtmlB = fs.readFileSync(path.join(expectedPath, 'b.html'), {encoding: 'utf8'});
   expectedHtmlC = fs.readFileSync(path.join(expectedPath, 'c.html'), {encoding: 'utf8'});
-
-
-  srcTheme = fs.readFileSync(path.join(fixturesPath, 'theme.css'), {encoding: 'utf8'});
 
   done();
 
@@ -205,8 +214,8 @@ describe('Manage tolkens', function () {
     };
 
     var tolkensMapStep1 = {};
-    var tolkensMapStep2 = N.addTolken('hidden', 'class', tolkensMapStep1);;
-    var tolkensMapStep3 = N.addTolken('hidden', 'class', tolkensMapStep2);;
+    var tolkensMapStep2 = N.addTolken('hidden', 'class', tolkensMapStep1);
+    var tolkensMapStep3 = N.addTolken('hidden', 'class', tolkensMapStep2);
 
 
     expect(N.addTolken('hidden', 'class', tolkensMapStep1)).to.be.deep.equal(expectedObjectA);
@@ -239,7 +248,7 @@ describe('Manage tolkens', function () {
 });
 
 describe('Main functions', function () {
-  it('should rename classes', function () {
+  it.skip('should rename classes', function () {
 
     var expectedObject = {
       css: [expectedCssA, expectedCssB],
@@ -252,26 +261,6 @@ describe('Main functions', function () {
     });
 
     expect(result).to.be.deep.equal(expectedObject);
-  })
-});
-
-
-
-describe.skip('Get Version', function () {
-  it('should get version', function () {
-    expect(N.getVersion()).to.equal('0.0.0');
-  });
-
-  it('Teste Theme', function (done) {
-    var tolkensMap = {};
-    this.timeout(30000);
-    tolkensMap = N.getTolkensMap(tolkensMap, srcTheme);
-    fs.writeFile('tolkensMap.js', JSON.stringify(tolkensMap));
-    fs.writeFile('teste.css', N.getRefactoredCSS(tolkensMap, srcTheme), function () {
-      done();
-    });
-
-    // expect(N.getRefactoredCSS(tolkensMap, srcCSS)).to.be.equal(expectedCSS);
   });
 });
 

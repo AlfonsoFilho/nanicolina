@@ -32,10 +32,10 @@
     "maxmin": "^1.0.1",
     "gulp": "^3.8.11",
     "gulp-mocha": "^2.0.0",
-    "gulp-coverage": "^0.3.34",
     "release-it": "0.0.15",
     "gulp-jshint": "^1.9.2",
-    "jshint-stylish": "^1.0.1"
+    "jshint-stylish": "^1.0.1",
+    "gulp-istanbul": "^0.6.0"
   },
   "scripts": {
     "test": "gulp test"
@@ -45,5 +45,9 @@
     "renaming",
     "tool",
     "optimization"
-  ]
+  ],
+  "dependencies": {
+    "coveralls": "^2.11.2",
+    "mocha-lcov-reporter": "0.0.2"
+  }
 }

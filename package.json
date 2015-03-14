@@ -1,7 +1,7 @@
 {
   "name": "Nanicolina",
   "description": "CSS Renaming Tool",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "homepage": "https://github.com/AlfonsoFilho/nanicolina",
   "author": {
     "name": "Alfonso Filho",
@@ -23,27 +23,22 @@
   "engines": {
     "node": ">= 0.8.0"
   },
-  "scripts": {
-    "test": "grunt test"
-  },
   "devDependencies": {
-    "grunt-contrib-jshint": "^0.9.2",
-    "grunt-contrib-clean": "^0.5.0",
-    "grunt": "~0.4.5",
-    "grunt-contrib-watch": "^0.6.1",
-    "load-grunt-tasks": "^3.1.0",
     "ramda": "^0.10.0",
     "mocha": "^2.1.0",
-    "grunt-mocha-test": "^0.12.7",
     "chai": "^2.0.0",
     "css": "^2.2.0",
     "cheerio": "^0.18.0",
-    "maxmin": "^1.0.1"
-  },
-  "peerDependencies": {
-    "grunt": "~0.4.5"
+    "maxmin": "^1.0.1",
+    "gulp": "^3.8.11",
+    "gulp-mocha": "^2.0.0",
+    "gulp-coverage": "^0.3.34",
+    "release-it": "0.0.15"
   },
   "keywords": [
-    "gruntplugin"
+    "css",
+    "renaming",
+    "tool",
+    "optimization"
   ]
 }

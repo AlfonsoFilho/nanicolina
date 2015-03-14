@@ -13,8 +13,7 @@ module.exports = function () {
     global[fn] = R[fn];
   }
 
-
-  var VERSION = '0.0.0';
+  // var packageJson = require('../package.json');
 
   var ATTR = /(\S+)=["]?((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["]?/g;
   var CLASS_ATTR = /^class=/g;
@@ -27,12 +26,8 @@ module.exports = function () {
 
   var RADIX = 52;
 
-  // var tolkensMap = [];
-
-
-
   var getVersion = function(){
-    return VERSION;
+    return packageJson.version;
   };
 
   var getAttributesFromHTML = compose(

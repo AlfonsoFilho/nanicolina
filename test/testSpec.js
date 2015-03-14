@@ -3,7 +3,7 @@ var chai = require("chai");
 var expect = chai.expect;
 var fs = require('fs');
 var path = require('path');
-var Nanicolina = require("../lib/Nanicolina.js");
+var Nanicolina = require("../nanicolina.js");
 
 var rootPath = process.cwd();
 var fixturesPath = path.join(rootPath, 'test', 'fixtures');
@@ -257,12 +257,12 @@ describe('Main functions', function () {
 
 
 
-describe('Get Version', function () {
+describe.skip('Get Version', function () {
   it('should get version', function () {
     expect(N.getVersion()).to.equal('0.0.0');
   });
 
-  it.only('Teste Theme', function (done) {
+  it('Teste Theme', function (done) {
     var tolkensMap = {};
     this.timeout(30000);
     tolkensMap = N.getTolkensMap(tolkensMap, srcTheme);

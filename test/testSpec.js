@@ -50,7 +50,7 @@ beforeEach(function (done) {
 });
 
 
-describe('Find ids and classes on html', function () {
+describe.skip('Find ids and classes on html', function () {
 
   it('should list all tags attributes', function () {
     var attributes = [
@@ -157,7 +157,7 @@ describe('Find ids and classes on html', function () {
 
 });
 
-describe('Find ids and classes on css', function () {
+describe.skip('Find ids and classes on css', function () {
 
   it('should get all css classes, not duplicated', function () {
 
@@ -189,7 +189,7 @@ describe('Find ids and classes on css', function () {
 
 });
 
-describe('Manage tolkens', function () {
+describe.skip('Manage tolkens', function () {
 
   it('get letter from number', function () {
     var BASE = 52;
@@ -247,7 +247,7 @@ describe('Manage tolkens', function () {
 
 });
 
-describe('Main functions', function () {
+describe.skip('Main functions', function () {
   it.skip('should rename classes', function () {
 
     var expectedObject = {

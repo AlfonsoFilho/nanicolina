@@ -35,8 +35,10 @@
     "not",
     "curry",
     "toLower",
+    "toUpper",
     "beforeEach",
     "it",
-    "describe"
+    "describe",
+    "join"
   ]
 }

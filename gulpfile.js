@@ -22,7 +22,8 @@ gulp.task('test', ['lint'], function(cb) {
 gulp.task('lint', function() {
   return gulp.src(['nanicolina.js', 'lib/**/*.js', 'test/*Spec.js'])
     .pipe(jshint())
-    .pipe(jshint.reporter(stylish));
+    .pipe(jshint.reporter(stylish))
+    .pipe(jshint.reporter('fail'));
 });
 
 gulp.task('default', function() {

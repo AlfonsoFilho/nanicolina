@@ -26,7 +26,7 @@
   "devDependencies": {
     "ramda": "^0.10.0",
     "mocha": "^2.2.1",
-    "chai": "^2.0.0",
+    "chai": "^2.1.2",
     "css": "^2.2.0",
     "cheerio": "^0.18.0",
     "maxmin": "^1.0.1",
@@ -39,7 +39,7 @@
     "glob": "^5.0.3",
     "coveralls": "^2.11.2",
     "mocha-lcov-reporter": "0.0.2",
-    "istanbul": "^0.3.7"
+    "istanbul": "^0.3.8"
   },
   "scripts": {
     "test": "gulp lint && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
@@ -50,7 +50,5 @@
     "tool",
     "optimization"
   ],
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }

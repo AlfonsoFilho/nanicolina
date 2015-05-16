@@ -4,6 +4,8 @@ tmp
 coverage
 .coverrun
 .coverdata
+test/ouput/**/*.*
+ouput/**/*.*
 
 # Created by https://www.gitignore.io
 

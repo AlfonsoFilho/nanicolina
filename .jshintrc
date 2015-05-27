@@ -20,7 +20,7 @@
     "isNil",
     "ifElse",
     "find",
-    "I",
+    "identity",
     "reduce",
     "append",
     "merge",
@@ -37,6 +37,7 @@
     "toLower",
     "toUpper",
     "beforeEach",
+    "afterEach",
     "it",
     "describe",
     "join"

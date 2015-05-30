@@ -30,6 +30,7 @@ describe('Utils lib', function () {
   it('should place ramda function on global scope', function () {
     utils.globalRamda();
     expect(map).to.not.be.undefined;
+    expect(global['curry']).to.not.be.undefined;
   });
 
   it('should remove directory', function () {
@@ -102,7 +103,7 @@ describe('Utils lib', function () {
 
   it('should log message', function () {
     sandbox.stub(global.console, "log");
-    utils.log('test', {test:true});
+    expect(utils.log('test', {test:true})).to.be.deep.equal({test:true});
     expect(console.log).to.have.been.calledWith('test');
     sandbox.restore();
   });

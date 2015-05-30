@@ -24,6 +24,7 @@
     "reduce",
     "append",
     "merge",
+    "tap",
     "flatten",
     "values",
     "keys",

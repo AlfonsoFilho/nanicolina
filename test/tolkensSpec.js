@@ -5,7 +5,6 @@ var chai = require("chai");
 var expect = chai.expect;
 var fs = require('fs');
 var path = require("path");
-var utils = require(path.resolve('lib', 'utils.js'));
 var tolkens = require(path.resolve('lib', 'tolkens.js'))();
 
 var rootPath = process.cwd();

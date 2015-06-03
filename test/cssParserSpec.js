@@ -94,7 +94,7 @@ describe('CSS Parser', function () {
       '#is.classB { color: #fff }',
       '.classB.classA { color: #fff }',
       '.classA > .classB > .classC { color: #fff }'
-    ].join();
+    ].join('');
 
     var expectedCss = [
       '.a { color: #fff }',
@@ -103,7 +103,7 @@ describe('CSS Parser', function () {
       '#is.b { color: #fff }',
       '.b.a { color: #fff }',
       '.a > .b > .c { color: #fff }'
-    ].join();
+    ].join('');
 
     expect(cssParser.getRefactoredCSS(tolkensMap, cssStr)).to.be.equal(expectedCss);
 

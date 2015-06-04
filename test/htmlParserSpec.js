@@ -32,6 +32,39 @@ describe('HTML Parser', function () {
     expect(htmlParser.removeDot('.class')).to.be.equal('class');
   });
 
+  it('should check if class attribute is map style', function(){
+    expect(htmlParser.isMapStyle('class')).to.be.equal(false);
+    expect(htmlParser.isMapStyle('class class')).to.be.equal(false);
+    expect(htmlParser.isMapStyle('[class]')).to.be.equal(false);
+    expect(htmlParser.isMapStyle('[class, class]')).to.be.equal(false);
+    expect(htmlParser.isMapStyle('{class: test()}')).to.be.equal(true);
+    expect(htmlParser.isMapStyle('{\'class\': test()}')).to.be.equal(true);
+    expect(htmlParser.isMapStyle('{"class": test()}')).to.be.equal(true);
+    expect(htmlParser.isMapStyle('{"class": test(), "class": test()}')).to.be.equal(true);
+  });
+
+  it('should check if class attribute is string style', function(){
+    expect(htmlParser.isStringStyle('class')).to.be.equal(true);
+    expect(htmlParser.isStringStyle('class class')).to.be.equal(true);
+    expect(htmlParser.isStringStyle('[class]')).to.be.equal(false);
+    expect(htmlParser.isStringStyle('[class, class]')).to.be.equal(false);
+    expect(htmlParser.isStringStyle('{class: test()}')).to.be.equal(false);
+    expect(htmlParser.isStringStyle('{\'class\': test()}')).to.be.equal(false);
+    expect(htmlParser.isStringStyle('{"class": test()}')).to.be.equal(false);
+    expect(htmlParser.isStringStyle('{"class": test(), "class": test()}')).to.be.equal(false);
+  });
+
+  it('should replace class from keys', function(){
+
+    var tolkenKey = 'classA';
+    var tolkenValue = 'a';
+
+    expect(htmlParser.replaceMapStyle(tolkenKey, tolkenValue, '{classA: test()}')).to.be.equal('{a: test()}');
+    expect(htmlParser.replaceMapStyle(tolkenKey, tolkenValue, '{\'classA\': test()}')).to.be.equal('{\'a\': test()}');
+    expect(htmlParser.replaceMapStyle(tolkenKey, tolkenValue, '{"classA": test()}')).to.be.equal('{"a": test()}');
+    expect(htmlParser.replaceMapStyle(tolkenKey, tolkenValue, '{"classA classA": test()}')).to.be.equal('{"a a": test()}');
+  });
+
   it('should replace class atributes', function(){
     var htmlSrc = [
       '<div class="classA"></div>',
@@ -50,7 +83,7 @@ describe('HTML Parser', function () {
     expect(htmlParser.replaceClass(tolkensMap, htmlSrc)).to.be.equal(expectedHtml);
   });
 
-  it('should repace ng-class attributes with MAP style', function () {
+  it('should replace ng-class attributes with MAP style', function () {
     var htmlSrc = [
       '<div ng-class="{\'classB\': classB()}"></div>',
       '<div ng-class="{\'classA\': test(), \'classB\': test()}"></div>'

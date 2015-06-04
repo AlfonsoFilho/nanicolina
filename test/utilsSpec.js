@@ -17,7 +17,6 @@ beforeEach(function (done) {
   sandbox = sinon.sandbox.create();
   utils.removeDir(path.resolve('test/output'));
   done();
-
 });
 
 afterEach(function() {
@@ -106,5 +105,9 @@ describe('Utils lib', function () {
     expect(utils.log('test', {test:true})).to.be.deep.equal({test:true});
     expect(console.log).to.have.been.calledWith('test');
     sandbox.restore();
+  });
+
+  it('should calculate data ratio save', function () {
+    expect(utils.getDataRateSave(2, 10)).to.be.deep.equal(0.8);
   });
 });

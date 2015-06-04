@@ -1,7 +1,7 @@
 /* global */
 'use strict';
 
-module.exports = function (options) {
+module.exports = function () {
 
   var fs = require('fs');
   var path = require('path');
@@ -14,48 +14,57 @@ module.exports = function (options) {
   utils.globalRamda();
 
   var getCssFiles = filter(match(/\.css$/));
+
   var getHtmlFiles = filter(match(/\.html$/));
-  var log = utils.log;
-  var writeFiles = forEach(function (file) {
-    utils.writeFile(path.join(options.dest || '', file.name), file.content);
+
+  var writeFiles = curry(function (dest, files) {
+    return forEach(function (file) {
+      utils.writeFile(path.join(dest || '', file.name), file.content);
+    }, files);
   });
 
 
-  /**
-   * Create Tolken Map
-   */
+  // Create Tolken Map
   var createTolken = compose( // FilesList => TolkensMap
       tolkens.getMap({}),
       join(''),
-      map(utils.readFile));
+      map(utils.readFile),
+      getCssFiles,
+      prop('src'));
 
-  var tolkensMap = createTolken(getCssFiles(options.src));
+  // CSS
+  var refactorCSS = curry(function (tolkensMap, src, dest) {
+    return compose(
+      writeFiles(dest),
+      map(function (file) {
+        return { name: file, content: cssParser.getRefactoredCSS(tolkensMap, utils.readFile(file)) };
+      }),
+      getCssFiles)(src);
+  });
 
-  /**
-   * CSS
-   */
-  var refactorCSS = compose(
-    writeFiles,
-    map(function (file) {
-      return { name: file, content: cssParser.getRefactoredCSS(tolkensMap, utils.readFile(file)) };
-    }));
+  //HTML
+  var refactorHTML = curry(function (tolkensMap, src, dest) {
+    return compose(
+      writeFiles(dest),
+      map(function (file) {
+        return { name: file, content: htmlParser.getRefactoredHTML(tolkensMap, utils.readFile(file)) };
+      }),
+      getHtmlFiles)(src);
+  });
 
-  refactorCSS(getCssFiles(options.src));
-
-  /**
-   * HTML
-   */
-   var refactorHTML = compose(
-    writeFiles,
-    map(function (file) {
-      return { name: file, content: htmlParser.getRefactoredHTML(tolkensMap, utils.readFile(file)) };
-    }));
-
-   refactorHTML(getHtmlFiles(options.src));
-
-  return {
-
+  var Shrink = function (options) {
+    var tolkensMap = createTolken(options);
+    refactorCSS(tolkensMap, options.src, options.dest);
+    refactorHTML(tolkensMap, options.src, options.dest);
   };
 
-
+  return {
+    shrink: Shrink,
+    _createTolken: createTolken,
+    _refactorCSS: refactorCSS,
+    _refactorHTML: refactorHTML,
+    _getCssFiles: getCssFiles,
+    _getHtmlFiles: getHtmlFiles,
+    _writeFiles: writeFiles
+  };
 };

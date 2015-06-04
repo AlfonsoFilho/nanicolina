@@ -25,21 +25,31 @@ afterEach(function() {
 
 describe('Tolkens lib', function () {
 
-  it('should convert class to tolken', function(){
-    expect(tolkens.convert('className', 'class', {})).to.be.deep.equal({'.className': 'a'});
+  it('should convert selector(class and id) to tolken', function(){
+    expect(tolkens.convert('.className', {})).to.be.deep.equal({'.className': 'a'});
+    expect(tolkens.convert('#idName', {})).to.be.deep.equal({'#idName': 'a'});
   });
 
   it('should add tolken to tolkensMap', function(){
     var tolkensMap = {};
 
-    tolkensMap = tolkens.add('firstClass', 'class', tolkensMap);
+    tolkensMap = tolkens.add('.firstClass', tolkensMap);
     expect(tolkensMap).to.be.deep.equal({'.firstClass': 'a'});
 
-    tolkensMap = tolkens.add('firstClass', 'class', tolkensMap);
+    tolkensMap = tolkens.add('.firstClass', tolkensMap);
     expect(tolkensMap).to.be.deep.equal({'.firstClass': 'a'});
 
-    tolkensMap = tolkens.add('secondClass', 'class', tolkensMap);
+    tolkensMap = tolkens.add('.secondClass', tolkensMap);
     expect(tolkensMap).to.be.deep.equal({'.firstClass': 'a', '.secondClass': 'b'});
+
+    tolkensMap = tolkens.add('#firstId', tolkensMap);
+    expect(tolkensMap).to.be.deep.equal({'.firstClass': 'a', '.secondClass': 'b', '#firstId': 'c'});
+
+    tolkensMap = tolkens.add('#firstId', tolkensMap);
+    expect(tolkensMap).to.be.deep.equal({'.firstClass': 'a', '.secondClass': 'b', '#firstId': 'c'});
+
+    tolkensMap = tolkens.add('#secondId', tolkensMap);
+    expect(tolkensMap).to.be.deep.equal({'.firstClass': 'a', '.secondClass': 'b', '#firstId': 'c', '#secondId': 'd'});
   });
 
   it('should create tolkensMap', function(){
@@ -57,7 +67,8 @@ describe('Tolkens lib', function () {
       '.title': 'i',
       '.link': 'j',
       '.open': 'k',
-      '.visible-xs': 'l'
+      '.visible-xs': 'l',
+      '#main': 'm',
     };
 
     tolkensMap = tolkens.getMap({}, srcCSS);

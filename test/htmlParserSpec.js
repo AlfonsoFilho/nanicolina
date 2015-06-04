@@ -32,6 +32,10 @@ describe('HTML Parser', function () {
     expect(htmlParser.removeDot('.class')).to.be.equal('class');
   });
 
+  it('should remove hash from id', function(){
+    expect(htmlParser.removeHash('#id')).to.be.equal('id');
+  });
+
   it('should check if class attribute is map style', function(){
     expect(htmlParser.isMapStyle('class')).to.be.equal(false);
     expect(htmlParser.isMapStyle('class class')).to.be.equal(false);
@@ -146,26 +150,54 @@ describe('HTML Parser', function () {
     expect(htmlParser.replaceDataNgClass(tolkensMap, htmlSrc)).to.be.equal(expectedHtml);
   });
 
-  it('should replace class, ng-class and data-ng-class atributes', function(){
+  it('should replace id attributes', function () {
     var htmlSrc = [
-      '<div class="classA"></div>',
+      '<div id="firstId"></div>',
+      '<div id="secondId"></div>'
+    ].join('');
+    var expectedHtml = [
+      '<div id="a"></div>',
+      '<div id="b"></div>'
+    ].join('');
+    var tolkensMap = { '#firstId': 'a', '#secondId': 'b' };
+
+    expect(htmlParser.replaceID(tolkensMap, htmlSrc)).to.be.equal(expectedHtml);
+  });
+
+  it('should replace for attributes', function () {
+    var htmlSrc = [
+      '<label for="firstId"></label>',
+      '<label for="secondId"></label>'
+    ].join('');
+    var expectedHtml = [
+      '<label for="a"></label>',
+      '<label for="b"></label>'
+    ].join('');
+    var tolkensMap = { '#firstId': 'a', '#secondId': 'b' };
+
+    expect(htmlParser.replaceFor(tolkensMap, htmlSrc)).to.be.equal(expectedHtml);
+  });
+
+  it('should replace class, ng-classm, data-ng-class, id and for atributes', function(){
+    var htmlSrc = [
+      '<div id="id-a" class="classA"></div>',
       '<div class="classB"></div>',
-      '<div class="classB classA"></div>',
+      '<div for="id-a" class="classB classA"></div>',
       '<div ng-class="classB"></div>',
       '<div ng-class="{\'classB\': test()}"></div>',
       '<div data-ng-class="classB" class="classA"></div>',
       '<div class="classA classB classA" data-ng-class="[classA classB]"></div>'
     ].join('');
     var expectedHtml = [
-      '<div class="a"></div>',
+      '<div id="c" class="a"></div>',
       '<div class="b"></div>',
-      '<div class="b a"></div>',
+      '<div for="c" class="b a"></div>',
       '<div ng-class="b"></div>',
       '<div ng-class="{\'b\': test()}"></div>',
       '<div data-ng-class="b" class="a"></div>',
       '<div class="a b a" data-ng-class="[classA classB]"></div>'
     ].join('');
-    var tolkensMap = { '.classA': 'a', '.classB': 'b' };
+    var tolkensMap = { '.classA': 'a', '.classB': 'b', '#id-a': 'c' };
 
     expect(htmlParser.getRefactoredHTML(tolkensMap, htmlSrc)).to.be.equal(expectedHtml);
   });

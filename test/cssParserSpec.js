@@ -29,21 +29,22 @@ describe('CSS Parser', function () {
   it('should get classes from css', function(){
 
     var expectArray = [
-      'content',
-      'container',
-      'hidden',
-      'is-home',
-      'row',
-      'col-xs-12',
-      'col-sm-8',
-      'col-lg-4',
-      'title',
-      'link',
-      'open',
-      'visible-xs',
+      '.content',
+      '.container',
+      '.hidden',
+      '.is-home',
+      '.row',
+      '.col-xs-12',
+      '.col-sm-8',
+      '.col-lg-4',
+      '.title',
+      '.link',
+      '.open',
+      '.visible-xs',
+      '#main',
     ];
 
-    expect(cssParser.getClassesFromCSS(srcCSS)).to.be.deep.equal(expectArray);
+    expect(cssParser.getSelectorsFromCSS(srcCSS)).to.be.deep.equal(expectArray);
 
   });
 
@@ -69,6 +70,15 @@ describe('CSS Parser', function () {
     expect(cssParser.removeDuplicate(['a', 'b', 'c'], 'd')).to.be.deep.equal(['a', 'b', 'c', 'd']);
   });
 
+  it('should get ID from selector', function () {
+    expect(cssParser.getID(['.class'])).to.be.deep.equal([]);
+    expect(cssParser.getID(['.class .class'])).to.be.deep.equal([]);
+    expect(cssParser.getID(['#id'])).to.be.deep.equal(['#id']);
+    expect(cssParser.getID(['#id > .class'])).to.be.deep.equal(['#id']);
+    expect(cssParser.getID(['#id.classA.classB'])).to.be.deep.equal(['#id']);
+    expect(cssParser.getID(['#id.classA.classB #id'])).to.be.deep.equal(['#id', '#id']);
+    expect(cssParser.getID(['div[role=\'document\']'])).to.be.deep.equal([]);
+  });
 
   it('should get class from selector', function () {
     expect(cssParser.getClass(['.class'])).to.be.deep.equal(['.class']);

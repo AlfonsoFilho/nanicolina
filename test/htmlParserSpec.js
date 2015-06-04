@@ -63,6 +63,7 @@ describe('HTML Parser', function () {
     expect(htmlParser.replaceMapStyle(tolkenKey, tolkenValue, '{\'classA\': test()}')).to.be.equal('{\'a\': test()}');
     expect(htmlParser.replaceMapStyle(tolkenKey, tolkenValue, '{"classA": test()}')).to.be.equal('{"a": test()}');
     expect(htmlParser.replaceMapStyle(tolkenKey, tolkenValue, '{"classA classA": test()}')).to.be.equal('{"a a": test()}');
+    expect(htmlParser.replaceMapStyle(tolkenKey, tolkenValue, '{"classA classA": test("classA")}')).to.be.equal('{"a a": test("classA")}');
   });
 
   it('should replace class atributes', function(){
@@ -97,12 +98,13 @@ describe('HTML Parser', function () {
     expect(htmlParser.replaceNgClass(tolkensMap, htmlSrc)).to.be.equal(expectedHtml);
   });
 
-  it('should replace ng-class atributes', function(){
+  it('should replace ng-class attributes', function(){
     var htmlSrc = [
       '<div ng-class="classB"></div>',
       '<div ng-class="classA classB"></div>',
       '<div ng-class="{\'classB\': classB()}"></div>',
       '<div ng-class="{\'classB\': classB(\'classA\')}"></div>',
+      // '<div ng-class=\'{"classB": classB("classA")}\'></div>', // Cheerio always wrap attributes with double quotes
       '<div ng-class="{\'classA\': test(), \'classB\': test()}"></div>',
       '<div ng-class="[classA classB]"></div>',
       '<div ng-class="[classA]"></div>'
@@ -112,6 +114,7 @@ describe('HTML Parser', function () {
       '<div ng-class="a b"></div>',
       '<div ng-class="{\'b\': classB()}"></div>',
       '<div ng-class="{\'b\': classB(\'classA\')}"></div>',
+      // '<div ng-class=\'{"b": classB("classA")}\'></div>', // Cheerio always wrap attributes with double quotes
       '<div ng-class="{\'a\': test(), \'b\': test()}"></div>',
       '<div ng-class="[classA classB]"></div>',
       '<div ng-class="[classA]"></div>'

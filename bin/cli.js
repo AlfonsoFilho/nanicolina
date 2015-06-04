@@ -2,11 +2,11 @@
 
 'use strict';
 
-process.title = 'nanicolina';
+process.title = 'Shrink Selectors';
 
-var Nanicolina = require('../nanicolina.js');
+var ShrinkSelectors = require('../shrink-selectors.js');
 
-var N = new Nanicolina({
+var shrink = new ShrinkSelectors({
   src: [
     'test/fixtures/a.css',
     'test/fixtures/b.css',

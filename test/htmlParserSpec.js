@@ -50,11 +50,26 @@ describe('HTML Parser', function () {
     expect(htmlParser.replaceClass(tolkensMap, htmlSrc)).to.be.equal(expectedHtml);
   });
 
+  it('should repace ng-class attributes with MAP style', function () {
+    var htmlSrc = [
+      '<div ng-class="{\'classB\': classB()}"></div>',
+      '<div ng-class="{\'classA\': test(), \'classB\': test()}"></div>'
+    ].join('');
+    var expectedHtml = [
+      '<div ng-class="{\'b\': classB()}"></div>',
+      '<div ng-class="{\'a\': test(), \'b\': test()}"></div>'
+    ].join('');
+    var tolkensMap = { '.classA': 'a', '.classB': 'b' };
+
+    expect(htmlParser.replaceNgClass(tolkensMap, htmlSrc)).to.be.equal(expectedHtml);
+  });
+
   it('should replace ng-class atributes', function(){
     var htmlSrc = [
       '<div ng-class="classB"></div>',
       '<div ng-class="classA classB"></div>',
-      '<div ng-class="{\'classB\': test()}"></div>',
+      '<div ng-class="{\'classB\': classB()}"></div>',
+      '<div ng-class="{\'classB\': classB(\'classA\')}"></div>',
       '<div ng-class="{\'classA\': test(), \'classB\': test()}"></div>',
       '<div ng-class="[classA classB]"></div>',
       '<div ng-class="[classA]"></div>'
@@ -62,7 +77,8 @@ describe('HTML Parser', function () {
     var expectedHtml = [
       '<div ng-class="b"></div>',
       '<div ng-class="a b"></div>',
-      '<div ng-class="{\'b\': test()}"></div>',
+      '<div ng-class="{\'b\': classB()}"></div>',
+      '<div ng-class="{\'b\': classB(\'classA\')}"></div>',
       '<div ng-class="{\'a\': test(), \'b\': test()}"></div>',
       '<div ng-class="[classA classB]"></div>',
       '<div ng-class="[classA]"></div>'

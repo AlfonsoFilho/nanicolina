@@ -1,23 +1,23 @@
 {
-  "name": "Nanicolina",
+  "name": "shrink-selectors",
   "description": "CSS Renaming Tool",
   "version": "0.0.1",
-  "homepage": "https://github.com/AlfonsoFilho/nanicolina",
+  "homepage": "https://github.com/AlfonsoFilho/shrink-selectors",
   "author": {
     "name": "Alfonso Filho",
     "email": "alfonsocfilho@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/AlfonsoFilho/nanicolina.git"
+    "url": "git://github.com/AlfonsoFilho/shrink-selectors.git"
   },
   "bugs": {
-    "url": "https://github.com/AlfonsoFilho/nanicolina/issues"
+    "url": "https://github.com/AlfonsoFilho/shrink-selectors/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/AlfonsoFilho/nanicolina/blob/master/LICENSE-MIT"
+      "url": "https://github.com/AlfonsoFilho/shrink-selectors/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {

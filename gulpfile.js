@@ -7,7 +7,7 @@ var istanbul = require('gulp-istanbul');
 
 gulp.task('test', ['lint'], function(cb) {
 
-  gulp.src(['nanicolina.js', 'lib/**/*.js'])
+  gulp.src(['shrink-selectors.js', 'lib/**/*.js'])
     .pipe(istanbul()) // Covering files
     .pipe(istanbul.hookRequire()) // Force `require` to return covered files
     .on('finish', function () {
@@ -20,7 +20,7 @@ gulp.task('test', ['lint'], function(cb) {
 });
 
 gulp.task('lint', function() {
-  return gulp.src(['nanicolina.js', 'lib/**/*.js', 'test/*Spec.js'])
+  return gulp.src(['shrink-selectors.js', 'lib/**/*.js', 'test/*Spec.js'])
     .pipe(jshint())
     .pipe(jshint.reporter(stylish))
     .pipe(jshint.reporter('fail'));

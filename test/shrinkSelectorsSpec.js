@@ -78,7 +78,7 @@ describe('Shrink Selectors', function () {
     expect(shrinkSelectors._getHtmlFiles(srcFiles)).to.be.deep.equal(expectedFiles);
   });
 
-  it('should mangle selectors', function () {
+  it.skip('should mangle selectors', function () {
 
     shrinkSelectors.shrink({
       src: [

@@ -26,7 +26,7 @@ afterEach(function() {
 
 describe('CSS Parser', function () {
 
-  it('should get classes from css', function(){
+  it('should get selectors from css', function(){
 
     var expectArray = [
       '.content',
@@ -48,7 +48,15 @@ describe('CSS Parser', function () {
 
   });
 
-  it('should get classes from @media rules', function(){
+  it('should replace id selectors', function(){
+    expect(cssParser.replaceID('#id', 'a', '#id { color: #fff }')).to.be.deep.equal('#a { color: #fff }');
+  });
+
+  it('should replace class selectors', function(){
+    expect(cssParser.replaceClass('.class', 'a', '.class { color: #fff }')).to.be.deep.equal('.a { color: #fff }');
+  });
+
+  it('should get selectors from @media rules', function(){
 
     var CSSOM = {
       type: 'media',
@@ -94,14 +102,15 @@ describe('CSS Parser', function () {
     var tolkensMap = {
       '.classA': 'a',
       '.classB': 'b',
-      '.classC': 'c'
+      '.classC': 'c',
+      '#id': 'd'
     };
 
     var cssStr = [
       '.classA { color: #fff }',
       '.classB { color: #fff }',
       '.classC { color: #fff }',
-      '#is.classB { color: #fff }',
+      '#id.classB { color: #fff }',
       '.classB.classA { color: #fff }',
       '.classA > .classB > .classC { color: #fff }'
     ].join('');
@@ -110,7 +119,7 @@ describe('CSS Parser', function () {
       '.a { color: #fff }',
       '.b { color: #fff }',
       '.c { color: #fff }',
-      '#is.b { color: #fff }',
+      '#d.b { color: #fff }',
       '.b.a { color: #fff }',
       '.a > .b > .c { color: #fff }'
     ].join('');

@@ -70,18 +70,32 @@ describe('HTML Parser', function () {
     expect(htmlParser.replaceMapStyle(tolkenKey, tolkenValue, '{"classA classA": test("classA")}')).to.be.equal('{"a a": test("classA")}');
   });
 
+  it('should replace class from strings', function(){
+
+    var tolkenKey = 'classA';
+    var tolkenValue = 'a';
+
+    expect(htmlParser.replaceStringStyle(tolkenKey, tolkenValue, 'classA')).to.be.equal('a');
+    expect(htmlParser.replaceStringStyle(tolkenKey, tolkenValue, 'classA classB')).to.be.equal('a classB');
+    expect(htmlParser.replaceStringStyle(tolkenKey, tolkenValue, 'classA skip-classA')).to.be.equal('a skip-classA');
+  });
+
   it('should replace class atributes', function(){
     var htmlSrc = [
       '<div class="classA"></div>',
       '<div class="classB"></div>',
       '<div class="classB classA"></div>',
-      '<div class="classB classA classB classA"></div>'
+      '<div class="classB classA classB classA"></div>',
+      '<div class="classB skip-classA"></div>',
+      '<div class="classB skip-classB"></div>'
     ].join('');
     var expectedHtml = [
       '<div class="a"></div>',
       '<div class="b"></div>',
       '<div class="b a"></div>',
-      '<div class="b a b a"></div>'
+      '<div class="b a b a"></div>',
+      '<div class="b skip-classA"></div>',
+      '<div class="b skip-classB"></div>'
     ].join('');
     var tolkensMap = { '.classA': 'a', '.classB': 'b' };
 

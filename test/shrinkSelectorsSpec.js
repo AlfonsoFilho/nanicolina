@@ -181,8 +181,6 @@ describe('Shrink Selectors', function () {
       exportMapTo: ''
     });
 
-    // setTimeout(function  () {
-
     //   var expectedCssA = fs.readFileSync(path.join(expectedPath, 'a.css'), {encoding: 'utf8'});
     //   var expectedCssB = fs.readFileSync(path.join(expectedPath, 'b.css'), {encoding: 'utf8'});
     //   var expectedHtmlA = fs.readFileSync(path.join(expectedPath, 'a.html'), {encoding: 'utf8'});
@@ -200,7 +198,6 @@ describe('Shrink Selectors', function () {
 
 
     //   done();
-    // }, 1000);
 
   });
 });

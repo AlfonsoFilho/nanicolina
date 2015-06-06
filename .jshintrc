@@ -15,6 +15,7 @@
     "length",
     "map",
     "mapAccum",
+    "composeP",
     "converge",
     "head",
     "tail",

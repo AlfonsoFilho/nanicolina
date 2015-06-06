@@ -7,8 +7,9 @@ var sinonChai = require("sinon-chai");
 var expect = chai.expect;
 var fs = require('fs');
 var path = require('path');
+var Q = require('q');
 
-var utils = require(path.resolve('lib', 'utils.js'));
+var utils = require(path.resolve('lib', 'utils.js'))();
 var sandbox;
 
 chai.use(sinonChai);
@@ -16,6 +17,11 @@ chai.use(sinonChai);
 beforeEach(function (done) {
   sandbox = sinon.sandbox.create();
   utils.removeDir(path.resolve('test/output'));
+  // utils.removeDir(path.resolve('test/output')).then(function () {
+  //   done();
+  // }, function () {
+  //   done();
+  // });
   done();
 });
 
@@ -40,44 +46,84 @@ describe('Utils lib', function () {
       }catch(e){ return false; }
     }
 
+    function hasDir(_path){
+      try{
+        return fs.statSync(_path).isDirectory();
+      }catch(e){ return false; }
+    }
+
+    // utils.createFile('test/output/test.txt', 'test').then(function () {
+    //   utils.removeDir('test/output').then(function (result) {
+    //     console.log('expect', result);
+    //     // expect(hasFile(path.join('test', 'output', 'test.txt'))).to.be.equal(false);
+    //     // expect(hasDir(path.join('test', 'output'))).to.be.equal(false);
+    //     done();
+    //   }, function () {
+    //     console.log('reject', arguments);
+    //     done();
+    //   });
+
+    //   // done();
+    // });
+
     fs.mkdirSync(path.join('test', 'output'));
     fs.writeFileSync(path.join('test', 'output', 'test.txt'), 'test.txt');
+
+
 
     expect(utils.removeDir('test/output')).to.be.equal(true);
     expect(hasFile(path.join('test', 'output', 'test.txt'))).to.be.equal(false);
     expect(utils.removeDir('test/output')).to.be.equal(false);
   });
 
-  it('should read file', function () {
-    var content = utils.readFile('test/fixtures/b.css');
-    var expected = [
-      '.hide {',
-      '  display: none !important;',
-      '}',
-      '.show {',
-      '  display: block !important;',
-      '}',
-      '.invisible {',
-      '  visibility: hidden;',
-      '}',
-      '.hidden {',
-      '  display: none !important;',
-      '  visibility: hidden !important;',
-      '}',
-      '.visible-xs,',
-      '.visible-sm,',
-      '.visible-md,',
-      '.visible-lg {',
-      '  display: none !important;',
-      '}\n'].join('\n');
+  it('should read file', function (done) {
 
-    expect(content).to.be.equal(expected);
+    utils.readFile('test/fixtures/b.css').then(function (content) {
+
+      var expected = [
+        '.hide {',
+        '  display: none !important;',
+        '}',
+        '.show {',
+        '  display: block !important;',
+        '}',
+        '.invisible {',
+        '  visibility: hidden;',
+        '}',
+        '.hidden {',
+        '  display: none !important;',
+        '  visibility: hidden !important;',
+        '}',
+        '.visible-xs,',
+        '.visible-sm,',
+        '.visible-md,',
+        '.visible-lg {',
+        '  display: none !important;',
+        '}\n'].join('\n');
+
+      expect(content).to.be.equal(expected);
+
+      done();
+    });
+  });
+
+  it('should create directory', function () {
+
+    var dirPath = 'test/output';
+
+    utils.createDir({dir: dirPath});
+
+    expect(fs.statSync(dirPath).isDirectory()).to.be.equal(true);
   });
 
   it('should write file', function (done) {
+
+    var filePath = 'test/output/file.txt';
     var expectedContent = 'test';
-    utils.writeFile('test/output/test.txt', expectedContent, function () {
-      var content = utils.readFile('test/output/test.txt');
+
+    utils.createFile(filePath, expectedContent).then(function () {
+      return Q.nfcall(fs.readFile, path.resolve(filePath), {encoding: 'utf8'});
+    }).then(function (content) {
       expect(content).to.be.equal(expectedContent);
       done();
     });

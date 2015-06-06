@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "chai": "^2.1.2",
+    "chai-as-promised": "^5.1.0",
     "coveralls": "^2.11.2",
     "glob": "^5.0.3",
     "gulp": "^3.8.11",
@@ -50,9 +51,10 @@
     "optimization"
   ],
   "dependencies": {
-    "mkdirp": "^0.5.1",
-    "ramda": "^0.14.0",
     "cheerio": "^0.18.0",
-    "css": "^2.2.0"
+    "css": "^2.2.0",
+    "mkdirp": "^0.5.1",
+    "q": "^1.4.1",
+    "ramda": "^0.14.0"
   }
 }

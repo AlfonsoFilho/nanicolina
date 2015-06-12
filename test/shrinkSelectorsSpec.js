@@ -167,7 +167,21 @@ describe('Shrink Selectors', function () {
 
   });
 
-  it.skip('should mangle selectors', function () {
+  it('should mangle selectors', function (done) {
+
+    var assertFile = function (actualFile, expectedFile) {
+
+      var _actualContent = '';
+
+      return Q.nfcall(fs.readFile, actualFile, {encoding: 'utf8'})
+        .then(function (content) {
+          _actualContent = content;
+          return Q.nfcall(fs.readFile, expectedFile, {encoding: 'utf8'});
+        }).then(function (content) {
+          expect(_actualContent).to.be.deep.equal(content);
+        });
+
+    };
 
     shrinkSelectors.shrink({
       src: [
@@ -179,25 +193,20 @@ describe('Shrink Selectors', function () {
       dest: 'output',
       ext: '',
       exportMapTo: ''
+    }).then(function () {
+      return assertFile('output/test/fixtures/a.html', 'test/expected/a.html');
+    }).then(function () {
+      return assertFile('output/test/fixtures/b.html', 'test/expected/b.html');
+    })
+    .then(function () {
+      return assertFile('output/test/fixtures/a.css', 'test/expected/a.css');
+    }).then(function () {
+      return assertFile('output/test/fixtures/b.css', 'test/expected/b.css');
+    }).then(function (content) {
+      done();
+    }).catch(function (err) {
+      done(err);
     });
-
-    //   var expectedCssA = fs.readFileSync(path.join(expectedPath, 'a.css'), {encoding: 'utf8'});
-    //   var expectedCssB = fs.readFileSync(path.join(expectedPath, 'b.css'), {encoding: 'utf8'});
-    //   var expectedHtmlA = fs.readFileSync(path.join(expectedPath, 'a.html'), {encoding: 'utf8'});
-    //   var expectedHtmlB = fs.readFileSync(path.join(expectedPath, 'b.html'), {encoding: 'utf8'});
-
-    //   var outputCssA = fs.readFileSync(path.join(outputPath, 'a.css'), {encoding: 'utf8'});
-    //   var outputCssB = fs.readFileSync(path.join(outputPath, 'b.css'), {encoding: 'utf8'});
-    //   var outputHtmlA = fs.readFileSync(path.join(outputPath, 'a.html'), {encoding: 'utf8'});
-    //   var outputHtmlB = fs.readFileSync(path.join(outputPath, 'b.html'), {encoding: 'utf8'});
-
-    //   expect(outputCssA).to.be.equal(expectedCssA);
-    //   expect(outputCssB).to.be.equal(expectedCssB);
-    //   expect(outputHtmlA).to.be.equal(expectedHtmlA);
-    //   expect(outputHtmlB).to.be.equal(expectedHtmlB);
-
-
-    //   done();
 
   });
 });

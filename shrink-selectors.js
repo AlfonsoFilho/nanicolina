@@ -64,9 +64,10 @@ module.exports = function () {
 
   var Shrink = function (options) {
     return createTolken(options).then(function (tolkensMap) {
-      return Q.all(
-        refactorCSS(tolkensMap, options.src, options.dest),
-        refactorHTML(tolkensMap, options.src, options.dest));
+      return refactorCSS(tolkensMap, options.src, options.dest)
+              .then(function () {
+                return refactorHTML(tolkensMap, options.src, options.dest);
+              });
     });
   };
 

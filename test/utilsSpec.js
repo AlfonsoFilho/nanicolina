@@ -17,11 +17,6 @@ chai.use(sinonChai);
 beforeEach(function (done) {
   sandbox = sinon.sandbox.create();
   utils.removeDir(path.resolve('test/output'));
-  // utils.removeDir(path.resolve('test/output')).then(function () {
-  //   done();
-  // }, function () {
-  //   done();
-  // });
   done();
 });
 

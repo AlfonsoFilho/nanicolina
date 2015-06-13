@@ -12,7 +12,31 @@ module.exports = function () {
   var cssParser = require('./lib/cssParser.js')();
   var tolkens = require('./lib/tolkens.js')();
 
-  utils.globalRamda();
+  var R              = require('ramda');
+  var compose        = R.compose;
+  var composeP       = R.composeP;
+  var curry          = R.curry;
+  var flatten        = R.flatten;
+  var filter         = R.filter;
+  var map            = R.map;
+  var not            = R.not;
+  var match          = R.match;
+  var isNil          = R.isNil;
+  var find           = R.find;
+  var ifElse         = R.ifElse;
+  var identity       = R.identity;
+  var append         = R.append;
+  var propEq         = R.propEq;
+  var prop           = R.prop;
+  var reduce         = R.reduce;
+  var converge       = R.converge;
+  var concat         = R.concat;
+  var replace        = R.replace;
+  var keys           = R.keys;
+  var values         = R.values;
+  var forEachIndexed = R.forEachIndexed;
+  var join           = R.join;
+  var split          = R.split;
 
   var getCssFiles = filter(match(/\.css$/));
 

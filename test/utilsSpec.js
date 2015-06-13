@@ -27,12 +27,6 @@ afterEach(function() {
 
 describe('Utils lib', function () {
 
-  it('should place ramda function on global scope', function () {
-    utils.globalRamda();
-    expect(map).to.not.be.undefined;
-    expect(global['curry']).to.not.be.undefined;
-  });
-
   it('should remove directory', function () {
 
     function hasFile(_path){

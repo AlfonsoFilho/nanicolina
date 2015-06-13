@@ -191,8 +191,8 @@ describe('Shrink Selectors', function () {
         'test/fixtures/b.html'
       ],
       dest: 'output',
-      ext: '',
-      exportMapTo: ''
+      exportTolkens: '',
+      importTolkens: ''
     }).then(function () {
       return assertFile('output/test/fixtures/a.html', 'test/expected/a.html');
     }).then(function () {

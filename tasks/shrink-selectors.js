@@ -2,10 +2,10 @@
 
 module.exports = function(grunt) {
 
-  grunt.registerMultiTask('grunt-shrink-selectors', 'CSS Renaming Tool', function() {
+  grunt.registerMultiTask('shrink-selectors', 'CSS Renaming Tool', function() {
 
     var path = require('path');
-    var shrinkSelectors = require(path.resolve('shrink-selectors.js'))();
+    var shrinkSelectors = require('../shrink-selectors.js')();
 
     var R     = require('ramda');
     var find  = R.find;

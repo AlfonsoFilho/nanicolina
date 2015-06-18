@@ -10,13 +10,14 @@ var path = require('path');
 var Q = require('q');
 
 var utils = require(path.resolve('lib', 'utils.js'))();
+var removeDir = require(path.resolve('test', 'helpers.js')).removeDir;
 var sandbox;
 
 chai.use(sinonChai);
 
 beforeEach(function (done) {
   sandbox = sinon.sandbox.create();
-  utils.removeDir(path.resolve('test/output'));
+  removeDir(path.resolve('test/output'));
   done();
 });
 
@@ -26,44 +27,6 @@ afterEach(function() {
 
 
 describe('Utils lib', function () {
-
-  it('should remove directory', function () {
-
-    function hasFile(_path){
-      try{
-        return fs.statSync(_path).isFile();
-      }catch(e){ return false; }
-    }
-
-    function hasDir(_path){
-      try{
-        return fs.statSync(_path).isDirectory();
-      }catch(e){ return false; }
-    }
-
-    // utils.createFile('test/output/test.txt', 'test').then(function () {
-    //   utils.removeDir('test/output').then(function (result) {
-    //     console.log('expect', result);
-    //     // expect(hasFile(path.join('test', 'output', 'test.txt'))).to.be.equal(false);
-    //     // expect(hasDir(path.join('test', 'output'))).to.be.equal(false);
-    //     done();
-    //   }, function () {
-    //     console.log('reject', arguments);
-    //     done();
-    //   });
-
-    //   // done();
-    // });
-
-    fs.mkdirSync(path.join('test', 'output'));
-    fs.writeFileSync(path.join('test', 'output', 'test.txt'), 'test.txt');
-
-
-
-    expect(utils.removeDir('test/output')).to.be.equal(true);
-    expect(hasFile(path.join('test', 'output', 'test.txt'))).to.be.equal(false);
-    expect(utils.removeDir('test/output')).to.be.equal(false);
-  });
 
   it('should read file', function (done) {
 

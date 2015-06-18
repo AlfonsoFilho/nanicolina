@@ -12,6 +12,7 @@ chai.use(chaiAsPromised);
 
 var shrinkSelectors = require(path.resolve('shrink-selectors.js'))();
 var utils = require(path.resolve('lib', 'utils.js'))();
+var removeDir = require(path.resolve('test', 'helpers.js')).removeDir;
 
 var fixturesPath = path.resolve('test', 'fixtures');
 var expectedPath = path.resolve('test', 'expected');
@@ -19,7 +20,7 @@ var outputPath = path.resolve('output', 'test', 'fixtures');
 
 
 beforeEach(function (done) {
-  utils.removeDir(path.resolve('test/output'));
+  removeDir(path.resolve('test/output'));
   done();
 });
 

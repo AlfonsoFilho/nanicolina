@@ -66,7 +66,11 @@ module.exports = function () {
       Q.all,
       map(function (file) {
         return utils.readFile(file).then(function (content) {
-          return { name: file, content: cssParser.getRefactoredCSS(tolkensMap, content) };
+          // console.log('file', file);
+          // console.log('contents', content);
+          var refactoredCSS = cssParser.getRefactoredCSS(tolkensMap, content);
+          // addCSS(file, content, refactoredCSS);
+          return { name: file, content: refactoredCSS };
         });
       }),
       getCssFiles)(src);

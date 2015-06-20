@@ -184,6 +184,16 @@ describe('Shrink Selectors', function () {
 
     };
 
+    var expectedReport = {
+      files: [
+        { filename: 'test/fixtures/a.css', original: { length: 863, bytes: 863}, refactored: { length: 497, bytes: 497}, compress: 0.4241 },
+        { filename: 'test/fixtures/b.css', original: { length: 270, bytes: 270}, refactored: { length: 221, bytes: 221}, compress: 0.1815 },
+        { filename: 'test/fixtures/a.html', original: { length: 402, bytes: 402}, refactored: { length: 330, bytes: 330}, compress: 0.1791 },
+        { filename: 'test/fixtures/b.html', original: { length: 461, bytes: 461}, refactored: { length: 376, bytes: 376}, compress: 0.1844 }
+      ],
+      summary: { original: { length: 1996, bytes: 1996}, refactored: { length: 1424, bytes: 1424}, compress: 0.2866 }
+    };
+
     shrinkSelectors.shrink({
       src: [
         'test/fixtures/a.css',
@@ -194,7 +204,8 @@ describe('Shrink Selectors', function () {
       dest: 'output',
       exportTolkens: '',
       importTolkens: ''
-    }).then(function () {
+    }).then(function (report) {
+      expect(report).to.be.deep.equal(expectedReport);
       return assertFile('output/test/fixtures/a.html', 'test/expected/a.html');
     }).then(function () {
       return assertFile('output/test/fixtures/b.html', 'test/expected/b.html');

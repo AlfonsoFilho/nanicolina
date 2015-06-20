@@ -3,14 +3,15 @@
 
 module.exports = function () {
 
-  var fs = require('fs');
+  var fs   = require('fs');
   var path = require('path');
-  var Q = require('q');
+  var Q    = require('q');
 
-  var utils = require('./lib/utils.js')();
+  var utils      = require('./lib/utils.js')();
   var htmlParser = require('./lib/htmlParser.js')();
-  var cssParser = require('./lib/cssParser.js')();
-  var tolkens = require('./lib/tolkens.js')();
+  var cssParser  = require('./lib/cssParser.js')();
+  var tolkens    = require('./lib/tolkens.js')();
+  var report     = require('./lib/report.js')();
 
   var R              = require('ramda');
   var compose        = R.compose;
@@ -37,6 +38,7 @@ module.exports = function () {
   var forEachIndexed = R.forEachIndexed;
   var join           = R.join;
   var split          = R.split;
+  var always         = R.always;
 
   var getCssFiles = filter(match(/\.css$/));
 
@@ -60,16 +62,19 @@ module.exports = function () {
 
   // CSS
   var refactorCSS = curry(function (tolkensMap, src, dest) {
+
+    var filesReport = [];
+
     return composeP(
+      // utils.log('HTML:SAIU'),
+      function() { return filesReport;},
       Q.all,
       writeFiles(dest),
       Q.all,
       map(function (file) {
         return utils.readFile(file).then(function (content) {
-          // console.log('file', file);
-          // console.log('contents', content);
           var refactoredCSS = cssParser.getRefactoredCSS(tolkensMap, content);
-          // addCSS(file, content, refactoredCSS);
+          filesReport = report.addFile(file, content, refactoredCSS, filesReport);
           return { name: file, content: refactoredCSS };
         });
       }),
@@ -78,13 +83,20 @@ module.exports = function () {
 
   //HTML
   var refactorHTML = curry(function (tolkensMap, src, dest) {
+
+    var filesReport = [];
+
     return composeP(
+      // utils.log('HTML:SAIU'),
+      function() { return filesReport;},
       Q.all,
       writeFiles(dest),
       Q.all,
       map(function (file) {
         return utils.readFile(file).then(function (content) {
-          return { name: file, content: htmlParser.getRefactoredHTML(tolkensMap, content) };
+          var refactoredHTML = htmlParser.getRefactoredHTML(tolkensMap, content);
+          filesReport = report.addFile(file, content, refactoredHTML, filesReport);
+          return { name: file, content: refactoredHTML };
         });
       }),
       getHtmlFiles)(src);
@@ -92,9 +104,20 @@ module.exports = function () {
 
   var Shrink = function (options) {
     return createTolken(options).then(function (tolkensMap) {
+
+      var filesReport = [];
+
       return refactorCSS(tolkensMap, options.src, options.dest)
-              .then(function () {
+              .then(function (_report) {
+                filesReport = concat(_report, filesReport);
                 return refactorHTML(tolkensMap, options.src, options.dest);
+              })
+              .then(function (_report) {
+                filesReport = concat(filesReport, _report);
+                return  {
+                  files: filesReport,
+                  summary: report.getSummary(filesReport)
+                };
               });
     });
   };

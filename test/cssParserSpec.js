@@ -1,10 +1,10 @@
 /*jshint -W030 */
 
-var assert = require("assert");
-var chai = require("chai");
+var assert = require('assert');
+var chai = require('chai');
 var expect = chai.expect;
 var fs = require('fs');
-var path = require("path");
+var path = require('path');
 var cssParser = require(path.resolve('lib', 'cssParser.js'))();
 
 var rootPath = process.cwd();
@@ -13,8 +13,7 @@ var expectedPath = path.join(rootPath, 'test', 'expected');
 
 var srcCSS;
 
-
-beforeEach(function () {
+beforeEach(function() {
 
   srcCSS = fs.readFileSync(path.join(fixturesPath, 'test.css'), {encoding: 'utf8'});
 
@@ -24,9 +23,9 @@ afterEach(function() {
 
 });
 
-describe('CSS Parser', function () {
+describe('CSS Parser', function() {
 
-  it('should get selectors from css', function(){
+  it('should get selectors from css', function() {
 
     var expectArray = [
       '.content',
@@ -48,37 +47,37 @@ describe('CSS Parser', function () {
 
   });
 
-  it('should replace id selectors', function(){
+  it('should replace id selectors', function() {
     expect(cssParser.replaceID('#id', 'a', '#id { color: #fff }')).to.be.deep.equal('#a { color: #fff }');
   });
 
-  it('should replace class selectors', function(){
+  it('should replace class selectors', function() {
     expect(cssParser.replaceClass('.class', 'a', '.class { color: #fff }')).to.be.deep.equal('.a { color: #fff }');
   });
 
-  it('should get selectors from @media rules', function(){
+  it('should get selectors from @media rules', function() {
 
     var CSSOM = {
       type: 'media',
       media: 'all and (max-width: 300px)',
       rules: [
-        { type: 'rule', selectors: ['.row'] }
+        {type: 'rule', selectors: ['.row']}
       ]
     };
-    var rule = { type: 'rule', selectors: ['.row'] };
+    var rule = {type: 'rule', selectors: ['.row']};
 
-    expect(cssParser.getClassFromMedia(CSSOM)).to.be.deep.equal([{ type: 'rule', selectors: ['.row'] }]);
-    expect(cssParser.getClassFromMedia(rule)).to.be.deep.equal({ type: 'rule', selectors: ['.row'] });
+    expect(cssParser.getClassFromMedia(CSSOM)).to.be.deep.equal([{type: 'rule', selectors: ['.row']}]);
+    expect(cssParser.getClassFromMedia(rule)).to.be.deep.equal({type: 'rule', selectors: ['.row']});
   });
 
-  it('should remove duplicate items from an Array', function () {
+  it('should remove duplicate items from an Array', function() {
     expect(cssParser.removeDuplicate(['a'], 'a')).to.be.deep.equal(['a']);
     expect(cssParser.removeDuplicate(['a', 'b'], 'a')).to.be.deep.equal(['a', 'b']);
     expect(cssParser.removeDuplicate(['a', 'b', 'c'], 'b')).to.be.deep.equal(['a', 'b', 'c']);
     expect(cssParser.removeDuplicate(['a', 'b', 'c'], 'd')).to.be.deep.equal(['a', 'b', 'c', 'd']);
   });
 
-  it('should get ID from selector', function () {
+  it('should get ID from selector', function() {
     expect(cssParser.getID(['.class'])).to.be.deep.equal([]);
     expect(cssParser.getID(['.class .class'])).to.be.deep.equal([]);
     expect(cssParser.getID(['#id'])).to.be.deep.equal(['#id']);
@@ -88,7 +87,7 @@ describe('CSS Parser', function () {
     expect(cssParser.getID(['div[role=\'document\']'])).to.be.deep.equal([]);
   });
 
-  it('should get class from selector', function () {
+  it('should get class from selector', function() {
     expect(cssParser.getClass(['.class'])).to.be.deep.equal(['.class']);
     expect(cssParser.getClass(['.class .class'])).to.be.deep.equal(['.class', '.class']);
     expect(cssParser.getClass(['#id'])).to.be.deep.equal([]);
@@ -97,7 +96,7 @@ describe('CSS Parser', function () {
     expect(cssParser.getClass(['div[role=\'document\']'])).to.be.deep.equal([]);
   });
 
-  it('should get class from selector', function () {
+  it('should get class from selector', function() {
 
     var tolkensMap = {
       '.classA': 'a',

@@ -1,9 +1,9 @@
 /*jshint -W030 */
 
-var assert = require("assert");
-var chai = require("chai");
-var sinon = require("sinon");
-var sinonChai = require("sinon-chai");
+var assert = require('assert');
+var chai = require('chai');
+var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
 var expect = chai.expect;
 var fs = require('fs');
 var path = require('path');
@@ -15,7 +15,7 @@ var sandbox;
 
 chai.use(sinonChai);
 
-beforeEach(function (done) {
+beforeEach(function(done) {
   sandbox = sinon.sandbox.create();
   removeDir(path.resolve('test/output'));
   done();
@@ -25,12 +25,11 @@ afterEach(function() {
   sandbox.restore();
 });
 
+describe('Utils lib', function() {
 
-describe('Utils lib', function () {
+  it('should read file', function(done) {
 
-  it('should read file', function (done) {
-
-    utils.readFile('test/fixtures/b.css').then(function (content) {
+    utils.readFile('test/fixtures/b.css').then(function(content) {
 
       var expected = [
         '.hide {',
@@ -59,7 +58,7 @@ describe('Utils lib', function () {
     });
   });
 
-  it('should create directory', function () {
+  it('should create directory', function() {
 
     var dirPath = 'test/output';
 
@@ -68,21 +67,21 @@ describe('Utils lib', function () {
     expect(fs.statSync(dirPath).isDirectory()).to.be.equal(true);
   });
 
-  it('should write file', function (done) {
+  it('should write file', function(done) {
 
     var filePath = 'test/output/file.txt';
     var expectedContent = 'test';
 
-    utils.createFile(filePath, expectedContent).then(function () {
+    utils.createFile(filePath, expectedContent).then(function() {
       return Q.nfcall(fs.readFile, path.resolve(filePath), {encoding: 'utf8'});
-    }).then(function (content) {
+    }).then(function(content) {
       expect(content).to.be.equal(expectedContent);
       done();
     });
 
   });
 
-  it('should get letter from number', function () {
+  it('should get letter from number', function() {
     var BASE = 52;
     expect(utils.toRadix(0, BASE)).to.be.equal('a');
     expect(utils.toRadix(25, BASE)).to.be.equal('z');
@@ -90,22 +89,22 @@ describe('Utils lib', function () {
     expect(utils.toRadix(27, BASE)).to.be.equal('B');
     expect(utils.toRadix(52, BASE)).to.be.equal('ba');
     expect(utils.toRadix(53, BASE)).to.be.equal('bb');
-    expect(utils.toRadix((52*10), BASE)).to.be.equal('ka');
-    expect(utils.toRadix((52*52), BASE)).to.be.equal('baa');
+    expect(utils.toRadix((52 * 10), BASE)).to.be.equal('ka');
+    expect(utils.toRadix((52 * 52), BASE)).to.be.equal('baa');
   });
 
-  it('should get object length', function () {
+  it('should get object length', function() {
     expect(utils.getObjectLength({a:1, b:2})).to.be.equal(2);
   });
 
-  it('should log message', function () {
-    sandbox.stub(global.console, "log");
+  it('should log message', function() {
+    sandbox.stub(global.console, 'log');
     expect(utils.log('test', {test:true})).to.be.deep.equal({test:true});
     expect(console.log).to.have.been.calledWith('test');
     sandbox.restore();
   });
 
-  it('should calculate data ratio save', function () {
+  it('should calculate data ratio save', function() {
     expect(utils.getDataRateSave(2, 10)).to.be.deep.equal(0.8);
   });
 });

@@ -1,7 +1,7 @@
 /* global */
 'use strict';
 
-module.exports = function () {
+module.exports = function() {
 
   var fs   = require('fs');
   var path = require('path');
@@ -44,15 +44,14 @@ module.exports = function () {
 
   var getHtmlFiles = filter(match(/\.html$/));
 
-  var writeFiles = curry(function (dest, files) {
-    return map(function (file) {
+  var writeFiles = curry(function(dest, files) {
+    return map(function(file) {
       return utils.createFile(path.join(dest || '', file.name), file.content);
     }, files);
   });
 
-
   // Create Tolken Map
-  var createTolken = composeP( // FilesList => TolkensMap
+  var createTolken = composeP(// FilesList => TolkensMap
       tolkens.getMap({}),
       join(''),
       Q.all,
@@ -61,7 +60,7 @@ module.exports = function () {
       prop('src'));
 
   // CSS
-  var refactorCSS = curry(function (tolkensMap, src, dest) {
+  var refactorCSS = curry(function(tolkensMap, src, dest) {
 
     var filesReport = [];
 
@@ -71,18 +70,18 @@ module.exports = function () {
       Q.all,
       writeFiles(dest),
       Q.all,
-      map(function (file) {
-        return utils.readFile(file).then(function (content) {
+      map(function(file) {
+        return utils.readFile(file).then(function(content) {
           var refactoredCSS = cssParser.getRefactoredCSS(tolkensMap, content);
           filesReport = report.addFile(file, content, refactoredCSS, filesReport);
-          return { name: file, content: refactoredCSS };
+          return {name: file, content: refactoredCSS};
         });
       }),
       getCssFiles)(src);
   });
 
   //HTML
-  var refactorHTML = curry(function (tolkensMap, src, dest) {
+  var refactorHTML = curry(function(tolkensMap, src, dest) {
 
     var filesReport = [];
 
@@ -92,29 +91,29 @@ module.exports = function () {
       Q.all,
       writeFiles(dest),
       Q.all,
-      map(function (file) {
-        return utils.readFile(file).then(function (content) {
+      map(function(file) {
+        return utils.readFile(file).then(function(content) {
           var refactoredHTML = htmlParser.getRefactoredHTML(tolkensMap, content);
           filesReport = report.addFile(file, content, refactoredHTML, filesReport);
-          return { name: file, content: refactoredHTML };
+          return {name: file, content: refactoredHTML};
         });
       }),
       getHtmlFiles)(src);
   });
 
-  var Shrink = function (options) {
-    return createTolken(options).then(function (tolkensMap) {
+  var Shrink = function(options) {
+    return createTolken(options).then(function(tolkensMap) {
 
       var filesReport = [];
 
       return refactorCSS(tolkensMap, options.src, options.dest)
-              .then(function (_report) {
+              .then(function(_report) {
                 filesReport = concat(_report, filesReport);
                 return refactorHTML(tolkensMap, options.src, options.dest);
               })
-              .then(function (_report) {
+              .then(function(_report) {
                 filesReport = concat(filesReport, _report);
-                return  {
+                return {
                   files: filesReport,
                   summary: report.getSummary(filesReport)
                 };
@@ -123,6 +122,8 @@ module.exports = function () {
   };
 
   return {
+    getReportTemplate: report.getReportTemplate,
+    saveReport: report.saveReport,
     shrink: Shrink,
     _createTolken: createTolken,
     _refactorCSS: refactorCSS,
